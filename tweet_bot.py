@@ -7,8 +7,7 @@ import tweepy
 import requests
 from TwitterAPI import TwitterAPI
 import time
-from requests_oauthlib import OAuth1
-from urlparse import parse_qs
+
 '''
 account datails collected from twitter app service
 for getting these details go to : 'https://apps.twitter.com/'
@@ -22,13 +21,13 @@ ts = Access Token Service
 #Searching usernames with Hashtag parameter
 
 
-auth = tweepy.OAuthHandler(ck,cs)
+auth = tweepy.OAuthHandler(ck,cs)   #creating auth object
 auth.set_access_token(tk,ts)
 temp2 = str()
 tweeter = list()
 receiver = list()
 api = tweepy.API(auth)
-hashtweet = tweepy.Cursor(api.search,q='#HappyBirthday').items(50)
+hashtweet = tweepy.Cursor(api.search,q='#HappyBirthday').items(50)   # q = item to be searched
 for tweet in hashtweet:
 	x = tweet.user.id_str
 	y = '@'+api.get_user(x).screen_name
@@ -36,7 +35,7 @@ for tweet in hashtweet:
 	temp = tweet.text
 	words = temp.split()
 	for word in words:
-		if word.startswith('@') and len(word)>2:
+		if word.startswith('@') and len(word)>2:   #parsing tagged person's user name
 			temp2 = word
 			receiver.append(temp2)
 
@@ -44,11 +43,11 @@ for tweet in hashtweet:
 #requesting api 
 
 
-api = TwitterAPI(ck, cs, tk, ts)
+api = TwitterAPI(ck, cs, tk, ts)   #creating API object
 for user in receiver:
-	line = 'Happy Birthday ' +user+ ' From Wishfie!'
+	line = 'Happy Birthday ' + user    # what to tweet?  
 	r = api.request('statuses/update', {'status' : line}) #line is the tweet here.
 	print line
 	print '$'
-	print r.status_code
+	print r.status_code   #if out put is 200 , it means you've tweeted successfully.
 time.sleep(60)
